@@ -42,8 +42,8 @@
                                 <div id="clear" class="button">C</div>
                             </div>
                             <div>
-                                <button id="submitForMatching" type="submit" class="submit-btn">Submit</button>
-                                <p id="time" class="action-left">3 try left</p>
+                                <button id="submitBtn" type="submit" class="submit-btn">Submit</button>
+                                <p  class="action-left"> <span id="time">3</span>try left</p>
                             </div>
                     </div>
                 </div>
@@ -54,5 +54,72 @@
             <p id ="correctPin" class="notify">✅ Pin Matched... Secret door is opening for you</p>
         </div>
     </div>
+    <script>
+        reset('undoLastDigit');
+        reset('clear');
+
+        numericKey('seven');
+        numericKey('eight');
+        numericKey('nine');
+        numericKey('four');
+        numericKey('five');
+        numericKey('six');
+        numericKey('three');
+        numericKey('tow');
+        numericKey('one');
+        numericKey('zero');
+
+        const generateBtn = document.getElementById('generateBtn');
+        generateBtn.addEventListener('click', function(){
+            var randomNumber = Math.round(1000 + Math.random()*9000);
+            document.getElementById('randomValue').value = randomNumber;
+        })
+        var submitBtn = document.getElementById('submitBtn');
+        submitBtn.addEventListener('click', function(){
+            const randomValue = document.getElementById('randomValue').value;
+            const matchingValue = document.getElementById('matchingInput').value;
+            if(randomValue == matchingValue){
+                document.getElementById('correctPin').style.display = 'block';
+            }else if(randomValue != matchingValue){
+                document.getElementById('wrongPin').style.display = 'block';
+                times('time');
+            }
+        })
+        function times(id){
+            var value = document.getElementById(id).innerText;
+                value = parseInt(value);
+                value -= 1;
+                document.getElementById('time').innerText = value;
+                if(value == 0){
+                    document.getElementById('submitBtn').disabled = true;
+                    return 0;
+                }
+        }
+
+        function reset(id){
+            const btn = document.getElementById(id)
+            btn.addEventListener('click', function(){
+            var inputValue = document.getElementById('matchingInput').value;
+            if(id == 'undoLastDigit'){   
+                inputValue = inputValue.slice(0, -1);
+                document.getElementById('matchingInput').value = inputValue;
+            }else{
+                document.getElementById('matchingInput').value = "";
+            }
+        })
+        }
+        function numericKey(number){
+            const numericBtn = document.getElementById(number);
+            numericBtn.addEventListener('click', function(){
+            var inputValue = document.getElementById('matchingInput');
+            inputValue.value += numericBtn.innerText; 
+        })
+        }
+
+        document.getElementById('wrongPin').style.display = 'none';
+        document.getElementById('correctPin').style.display = 'none';
+        document.getElementById('randomValue').value = "Click Generate the button";
+        document.getElementById('matchingInput').value = "";
+    </script>
 </body>
 </html>
